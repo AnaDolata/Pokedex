@@ -25,7 +25,7 @@ public class Login extends AppCompatActivity {
   public void verify(View view){
     //consultar BD
     //ver se não tá vazio
-    Intent i = new Intent(Login.this, MainActivity.class);
+    Intent i = new Intent(Login.this, ListarActivity.class);
     startActivity(i);
     finish();
   }
