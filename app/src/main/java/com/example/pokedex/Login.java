@@ -53,7 +53,20 @@ public class Login extends AppCompatActivity {
             startActivity(i);
             finish();
           }else{
-            Toast.makeText(Login.this, "Usuário ou Senha incorretos", Toast.LENGTH_SHORT).show();
+            AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+            builder.setMessage("Usuário ou Senha incorretos");
+            builder.setTitle("Atenção");
+            builder.setCancelable(false);
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+                user.setText("");
+                password.setText("");
+              }
+            });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
           }
         }
 
