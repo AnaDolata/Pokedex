@@ -10,8 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pokedex.R;
+import com.example.pokedex.model.Pokemon;
+
+import java.util.List;
 
 public class AdapterTipo extends RecyclerView.Adapter<AdapterTipo.MyViewHolder> {
+
+  private List<Pokemon> pokemonList;
+
+  public AdapterTipo(List<Pokemon> list){
+    this.pokemonList = list;
+  }
 
   public class MyViewHolder extends RecyclerView.ViewHolder{
 
@@ -33,11 +42,12 @@ public class AdapterTipo extends RecyclerView.Adapter<AdapterTipo.MyViewHolder> 
 
   @Override
   public void onBindViewHolder(@NonNull AdapterTipo.MyViewHolder holder, int position) {
-    holder.name.setText("Pokebola");
+    Pokemon obj = pokemonList.get(position);
+    holder.name.setText(obj.getNome());
   }
 
   @Override
   public int getItemCount() {
-    return 10;
+    return pokemonList.size();
   }
 }
