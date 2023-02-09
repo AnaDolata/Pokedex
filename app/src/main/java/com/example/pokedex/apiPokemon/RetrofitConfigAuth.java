@@ -16,4 +16,8 @@ public class RetrofitConfigAuth {
   public AuthService getAuthService(){
     return this.retrofit.create(AuthService.class);
   }
+
+  public PKService getPKService(){
+    return this.retrofit.create(PKService.class);
+  }
 }

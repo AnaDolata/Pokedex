@@ -61,8 +61,6 @@ public class Login extends AppCompatActivity {
               @Override
               public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
-                user.setText("");
-                password.setText("");
               }
             });
             AlertDialog alertDialog = builder.create();
