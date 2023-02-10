@@ -49,7 +49,7 @@ public class Login extends AppCompatActivity {
         @Override
         public void onResponse(Call<Usuario> call, Response<Usuario> response) {
           if(response.isSuccessful()) {
-            Intent i = new Intent(Login.this, PesquisaTipoActivity.class);
+            Intent i = new Intent(Login.this, MainActivity.class);
             startActivity(i);
             finish();
           }else{
