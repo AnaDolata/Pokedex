@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     recyclerViewTipo.setAdapter(adapter);
 
     this.createPokemonHability();
-    AdapterHabilidade adapterHabilidade = new AdapterHabilidade();
+    AdapterHabilidade adapterHabilidade = new AdapterHabilidade(listPokemon);
     recyclerViewTipo.setHasFixedSize(true);
     recyclerViewTipo.setAdapter(adapterHabilidade);
 
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
       startActivity(intent);
     }
     if(item.getItemId() == R.id.sair){
-
+      finish();
     }
     return super.onOptionsItemSelected(item);
   }

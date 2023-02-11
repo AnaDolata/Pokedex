@@ -7,13 +7,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.pokedex.adapter.AdapterTipo;
-import com.example.pokedex.apiPokemon.RetrofitConfigAuth;
+import com.example.pokedex.apiPokemon.RetrofitConfig;
 import com.example.pokedex.model.Pokemon;
 
 import java.util.ArrayList;
@@ -38,32 +38,42 @@ public class PesquisaTipoActivity extends AppCompatActivity {
 
   }
 
-  public void search(View view){
+  public void search(View view) {
     input = findViewById(R.id.editTextType);
 
-    recyclerViewTipo = findViewById(R.id.recyclerViewType);
-    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+    if (input.length() == 0) {
+      Toast.makeText(this, "Digite um tipo", Toast.LENGTH_SHORT).show();
+    } else {
 
-    Call<List<Pokemon>> call = new RetrofitConfigAuth().getPKService().getPokemonTipo();
-    call.enqueue(new Callback<List<Pokemon>>() {
-      @Override
-      public void onResponse(Call<List<Pokemon>> call, Response<List<Pokemon>> response) {
-        if(response.isSuccessful()){
-          pokemonList = response.body();
-          adapter = new AdapterTipo(pokemonList);
-          recyclerViewTipo.setLayoutManager(layoutManager);
-          recyclerViewTipo.setHasFixedSize(true);
-          recyclerViewTipo.addItemDecoration(new DividerItemDecoration(PesquisaTipoActivity.this, LinearLayout.VERTICAL));
-          recyclerViewTipo.setAdapter(adapter);
+      recyclerViewTipo = findViewById(R.id.recyclerViewType);
+      RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+
+      Pokemon pokemon = new Pokemon();
+      pokemon.setTipo(input.getText().toString());
+
+      Call<List<Pokemon>> call = new RetrofitConfig().getPKService().getPokemonTipo(input.getText().toString());
+      call.enqueue(new Callback<List<Pokemon>>() {
+        @Override
+        public void onResponse(Call<List<Pokemon>> call, Response<List<Pokemon>> response) {
+          if (response.isSuccessful()) {
+            pokemonList = response.body();
+            adapter = new AdapterTipo(pokemonList);
+            recyclerViewTipo.setLayoutManager(layoutManager);
+            recyclerViewTipo.setHasFixedSize(true);
+            recyclerViewTipo.addItemDecoration(new DividerItemDecoration(PesquisaTipoActivity.this, LinearLayout.VERTICAL));
+            recyclerViewTipo.setAdapter(adapter);
+          } else {
+            Toast.makeText(PesquisaTipoActivity.this, "Nenhum Pokemon encontrado", Toast.LENGTH_SHORT).show();
+          }
         }
-      }
 
-      @Override
-      public void onFailure(Call<List<Pokemon>> call, Throwable t) {
+        @Override
+        public void onFailure(Call<List<Pokemon>> call, Throwable t) {
 
-      }
-    });
+        }
+      });
 
-    input.setText("");
+      input.setText("");
+    }
   }
 }
