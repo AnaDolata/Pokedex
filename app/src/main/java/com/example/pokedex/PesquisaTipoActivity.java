@@ -48,9 +48,6 @@ public class PesquisaTipoActivity extends AppCompatActivity {
       recyclerViewTipo = findViewById(R.id.recyclerViewType);
       RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
 
-      Pokemon pokemon = new Pokemon();
-      pokemon.setTipo(input.getText().toString());
-
       Call<List<Pokemon>> call = new RetrofitConfig().getPKService().getPokemonTipo(input.getText().toString());
       call.enqueue(new Callback<List<Pokemon>>() {
         @Override

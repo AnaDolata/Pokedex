@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.pokedex.apiPokemon.RetrofitConfig;
 import com.example.pokedex.model.Pokemon;
@@ -28,6 +29,7 @@ public class ListarDetalhes extends AppCompatActivity {
   EditText nome, tipo, habilidade;
   ImageView imagem;
   Bitmap bitmap;
+  String idPokemon;
 
   @SuppressLint({"MissingInflatedId", "ResourceType"})
   @Override
@@ -55,6 +57,7 @@ public class ListarDetalhes extends AppCompatActivity {
       Bundle params = it.getExtras();
       if(params != null) {
         String pokId = params.getString("id");
+        idPokemon = pokId;
         Log.i("pokemon id", pokId);
 
         Call<Pokemon> call = new RetrofitConfig().getPKService().getPokemonById(Long.parseLong(pokId));
@@ -87,10 +90,23 @@ public class ListarDetalhes extends AppCompatActivity {
   }
 
   public void delete(View view){
-    //deletar da base
-    Intent i = new Intent(ListarDetalhes.this, ListarActivity.class);
-    startActivity(i);
-    finish();
+    Call<Void> call = new RetrofitConfig().getPKService().deletePokemon(Long.parseLong(idPokemon));
+    call.enqueue(new Callback<Void>() {
+      @Override
+      public void onResponse(Call<Void> call, Response<Void> response) {
+        if(response.isSuccessful()){
+          Toast.makeText(ListarDetalhes.this, "Pokemon excluído!", Toast.LENGTH_SHORT).show();
+          Intent i = new Intent(ListarDetalhes.this, ListarActivity.class);
+          startActivity(i);
+          finish();
+        }
+      }
+
+      @Override
+      public void onFailure(Call<Void> call, Throwable t) {
+
+      }
+    });
   }
 
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
