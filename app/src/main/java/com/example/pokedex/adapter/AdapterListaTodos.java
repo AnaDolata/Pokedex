@@ -10,8 +10,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pokedex.R;
+import com.example.pokedex.model.Pokemon;
+
+import java.util.List;
 
 public class AdapterListaTodos extends RecyclerView.Adapter<AdapterListaTodos.MyViewHolder> {
+
+  private List<Pokemon> list;
+
+  public AdapterListaTodos(List<Pokemon> list){ this.list = list; }
 
   public class MyViewHolder extends RecyclerView.ViewHolder{
 
@@ -24,6 +31,7 @@ public class AdapterListaTodos extends RecyclerView.Adapter<AdapterListaTodos.My
       image = view.findViewById(R.id.imageViewPokemon);
     }
   }
+
   @NonNull
   @Override
   public AdapterListaTodos.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -34,12 +42,13 @@ public class AdapterListaTodos extends RecyclerView.Adapter<AdapterListaTodos.My
 
   @Override
   public void onBindViewHolder(@NonNull AdapterListaTodos.MyViewHolder holder, int position) {
-    holder.name.setText("Pokebola");
+    Pokemon obj = list.get(position);
+    holder.name.setText(obj.getNome());
     holder.image.setImageResource(R.drawable.img);
   }
 
   @Override
   public int getItemCount() {
-    return 5;
+    return list.size();
   }
 }

@@ -8,14 +8,26 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.example.pokedex.adapter.AdapterListaTodos;
+import com.example.pokedex.apiPokemon.RetrofitConfig;
+import com.example.pokedex.model.Pokemon;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ListarActivity extends AppCompatActivity {
 
   RecyclerView recyclerViewListar;
+  List<Pokemon> list = new ArrayList<>();
+  AdapterListaTodos adapter;
 
   @SuppressLint("MissingInflatedId")
   @Override
@@ -24,38 +36,56 @@ public class ListarActivity extends AppCompatActivity {
     setContentView(R.layout.activity_listar);
 
     recyclerViewListar = findViewById(R.id.recyclerViewListaTodos);
-
-    AdapterListaTodos adapter = new AdapterListaTodos();
-
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-    recyclerViewListar.setLayoutManager(layoutManager);
-    recyclerViewListar.setHasFixedSize(true);
-    recyclerViewListar.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
-    recyclerViewListar.setAdapter(adapter);
 
-    recyclerViewListar.addOnItemTouchListener(new RecyclerItemClickListener(
-            getApplicationContext(),
-            recyclerViewListar,
-            new RecyclerItemClickListener.OnItemClickListener() {
-              @Override
-              public void onItemClick(View view, int position) {
-                //passar o id para intent
-                Intent i = new Intent(ListarActivity.this, ListarDetalhes.class);
-                Bundle params = new Bundle();
-                params.putInt("id", position);
-                i.putExtras(params);
-                startActivity(i);
-              }
+    Call<List<Pokemon>> call = new RetrofitConfig().getPKService().getPokemonList();
+    call.enqueue(new Callback<List<Pokemon>>() {
+      @Override
+      public void onResponse(Call<List<Pokemon>> call, Response<List<Pokemon>> response) {
+        if(response.isSuccessful()){
+          list = response.body();
+          adapter = new AdapterListaTodos(list);
+          recyclerViewListar.setLayoutManager(layoutManager);
+          recyclerViewListar.setHasFixedSize(true);
+          recyclerViewListar.addItemDecoration(new DividerItemDecoration(ListarActivity.this, LinearLayout.VERTICAL));
+          recyclerViewListar.setAdapter(adapter);
 
-              @Override
-              public void onItemLongClick(View view, int position) {
-                Intent i = new Intent(ListarActivity.this, ListarDetalhes.class);
-                Bundle params = new Bundle();
-                params.putInt("id", position);
-                i.putExtras(params);
-                startActivity(i);
-                finish();
-              }
-            }));
+          recyclerViewListar.addOnItemTouchListener(new RecyclerItemClickListener(
+                  getApplicationContext(),
+                  recyclerViewListar,
+                  new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                      Pokemon pokemon = list.get(position);
+                      //Log.i("pokemon", String.valueOf(pokemon.getId()));
+                      //passar o id para intent
+                      Intent i = new Intent(ListarActivity.this, ListarDetalhes.class);
+                      Bundle params = new Bundle();
+                      params.putString("id", String.valueOf(pokemon.getId()));
+                      i.putExtras(params);
+                      startActivity(i);
+                    }
+
+                    @Override
+                    public void onItemLongClick(View view, int position) {
+                      Pokemon pokemon = list.get(position);
+                      //Log.i("pokemon", String.valueOf(pokemon.getId()));
+                      //passar o id para intent
+                      Intent i = new Intent(ListarActivity.this, ListarDetalhes.class);
+                      Bundle params = new Bundle();
+                      params.putString("id", String.valueOf(pokemon.getId()));
+                      i.putExtras(params);
+                      startActivity(i);
+                    }
+                  }));
+        }
+      }
+
+      @Override
+      public void onFailure(Call<List<Pokemon>> call, Throwable t) {
+
+      }
+    });
+
   }
 }

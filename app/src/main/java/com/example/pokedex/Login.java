@@ -4,16 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.pokedex.apiPokemon.RetrofitConfigAuth;
+import com.example.pokedex.apiPokemon.RetrofitConfig;
 import com.example.pokedex.model.Usuario;
 
 import retrofit2.Call;
@@ -43,7 +41,7 @@ public class Login extends AppCompatActivity {
       usuario.setLogin(user.getText().toString());
       usuario.setSenha(password.getText().toString());
 
-      Call<Usuario> call = new RetrofitConfigAuth().getAuthService().auth(usuario);
+      Call<Usuario> call = new RetrofitConfig().getAuthService().auth(usuario);
 
       call.enqueue(new Callback<Usuario>() {
         @Override

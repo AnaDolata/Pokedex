@@ -7,13 +7,21 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.example.pokedex.apiPokemon.RetrofitConfig;
+import com.example.pokedex.model.Pokemon;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ListarDetalhes extends AppCompatActivity {
 
@@ -42,22 +50,37 @@ public class ListarDetalhes extends AppCompatActivity {
       }
     });
 
-    //Intent it = getIntent();
-    //if(it != null){
-      //String id = it.getStringExtra("id");
-      //if(id != null) {
-        //int id1 = Integer.parseInt(id);
-        //pega o id no banco e set nos campos
-        nome.setText("nome");
-        tipo.setText("tipo");
-        habilidade.setText("habildadessss");
-        imagem.setImageResource(R.drawable.img);
-      //}
-    //}
+    Intent it = getIntent();
+    if(it != null){
+      Bundle params = it.getExtras();
+      if(params != null) {
+        String pokId = params.getString("id");
+        Log.i("pokemon id", pokId);
+
+        Call<Pokemon> call = new RetrofitConfig().getPKService().getPokemonById(Long.parseLong(pokId));
+        call.enqueue(new Callback<Pokemon>() {
+          @Override
+          public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {
+            if(response.isSuccessful()) {
+              Pokemon pokemon = response.body();
+              nome.setText(pokemon.getNome());
+              tipo.setText(pokemon.getTipo());
+              habilidade.setText(pokemon.getHabilidades());
+              imagem.setImageResource(R.drawable.img);
+            }
+          }
+
+          @Override
+          public void onFailure(Call<Pokemon> call, Throwable t) {
+
+          }
+        });
+      }
+    }
   }
 
   public void save(View view){
-    //atualizar a imagem tbmm - no método de baixo
+    //atualizar a imagem tbmm - no método onActivityResult
     Intent i = new Intent(ListarDetalhes.this, ListarActivity.class);
     startActivity(i);
     finish();
