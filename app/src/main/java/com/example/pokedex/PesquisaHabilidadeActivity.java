@@ -47,10 +47,7 @@ public class PesquisaHabilidadeActivity extends AppCompatActivity {
       recyclerViewHabilidade = findViewById(R.id.recyclerViewAbility);
       RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
 
-      Pokemon pokemon = new Pokemon();
-      pokemon.setHabilidades(input.getText().toString());
-
-      Call<List<Pokemon>> call = new RetrofitConfig().getPKService().getPokemonHabilidade(pokemon);
+      Call<List<Pokemon>> call = new RetrofitConfig().getPKService().getPokemonHabilidade(input.getText().toString());
       call.enqueue(new Callback<List<Pokemon>>() {
         @Override
         public void onResponse(Call<List<Pokemon>> call, Response<List<Pokemon>> response) {

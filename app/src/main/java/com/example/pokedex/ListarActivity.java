@@ -64,6 +64,7 @@ public class ListarActivity extends AppCompatActivity {
                       params.putString("id", String.valueOf(pokemon.getId()));
                       i.putExtras(params);
                       startActivity(i);
+                      finish();
                     }
 
                     @Override
@@ -76,6 +77,7 @@ public class ListarActivity extends AppCompatActivity {
                       params.putString("id", String.valueOf(pokemon.getId()));
                       i.putExtras(params);
                       startActivity(i);
+                      finish();
                     }
                   }));
         }
