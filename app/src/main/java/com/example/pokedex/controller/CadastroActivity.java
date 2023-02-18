@@ -1,4 +1,4 @@
-package com.example.pokedex;
+package com.example.pokedex.controller;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +18,8 @@ import android.widget.TextView;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+
+import com.example.pokedex.R;
 
 public class CadastroActivity extends AppCompatActivity {
 

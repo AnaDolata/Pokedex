@@ -1,10 +1,12 @@
-package com.example.pokedex;
+package com.example.pokedex.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+
+import com.example.pokedex.R;
 
 public class SplashScreen extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.example.pokedex;
+package com.example.pokedex.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.example.pokedex.R;
 import com.example.pokedex.adapter.AdapterListaTodos;
 import com.example.pokedex.apiPokemon.RetrofitConfig;
 import com.example.pokedex.model.Pokemon;
