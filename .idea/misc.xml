@@ -3,22 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/activity_cadastro.xml" value="0.2" />
-        <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/activity_listar.xml" value="0.18802083333333333" />
-        <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/activity_listar_detalhes.xml" value="0.18802083333333333" />
-        <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/activity_login.xml" value="0.18802083333333333" />
-        <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/activity_main.xml" value="0.25" />
-        <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/activity_pesquisa_habilidade.xml" value="0.18802083333333333" />
-        <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/activity_pesquisa_tipo.xml" value="0.36666666666666664" />
-        <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/activity_splash_screen.xml" value="0.18802083333333333" />
-        <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/adapter_list_habilidade.xml" value="0.36666666666666664" />
-        <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/adapter_list_lista_todos.xml" value="0.36666666666666664" />
-        <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/adapter_list_tipo.xml" value="0.36666666666666664" />
-        <entry key="..\:/ANDROID/Pokedex/app/src/main/res/menu/menu_main.xml" value="0.25" />
+        <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/activity_cadastro.xml" value="0.36666666666666664" />
+        <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/activity_listar.xml" value="0.36666666666666664" />
+        <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/activity_listar_detalhes.xml" value="0.36666666666666664" />
+        <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/activity_login.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>
-  <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
