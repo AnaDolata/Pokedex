@@ -6,12 +6,12 @@ public class Pokemon {
   private String nome;
   private String tipo;
   private String habilidades;
-  private byte[] foto;
+  private String foto;
   private String usuario;
 
   public Pokemon(){ };
 
-  public Pokemon(long id, String nome, String tipo, String habilidades, byte[] foto, String usuario) {
+  public Pokemon(long id, String nome, String tipo, String habilidades, String foto, String usuario) {
     this.id = id;
     this.nome = nome;
     this.tipo = tipo;
@@ -52,11 +52,11 @@ public class Pokemon {
     this.habilidades = habilidades;
   }
 
-  public byte[] getFoto() {
+  public String getFoto() {
     return foto;
   }
 
-  public void setFoto(byte[] foto) {
+  public void setFoto(String foto) {
     this.foto = foto;
   }
 

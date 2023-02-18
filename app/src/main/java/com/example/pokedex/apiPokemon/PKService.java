@@ -9,6 +9,7 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -28,4 +29,7 @@ public interface PKService {
 
   @DELETE("pokemons/{id}")
   Call<Void> deletePokemon(@Path("id") long id);
+
+  @POST("pokemons")
+  Call<Void> createPokemon(@Body Pokemon pokemon);
 }

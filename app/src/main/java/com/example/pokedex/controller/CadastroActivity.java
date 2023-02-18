@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -15,11 +16,18 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 import com.example.pokedex.R;
+import com.example.pokedex.apiPokemon.RetrofitConfig;
+import com.example.pokedex.model.Pokemon;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CadastroActivity extends AppCompatActivity {
 
@@ -27,7 +35,7 @@ public class CadastroActivity extends AppCompatActivity {
     ImageView image;
     TextView txtNome, txtHabilidade, txtTipo;
     private final int REQUEST_CAMERA_CODE = 4;
-
+    String stringIMG;
     String nome, habilidade, tipo;
 
 
@@ -49,11 +57,31 @@ public class CadastroActivity extends AppCompatActivity {
         bit.compress(Bitmap.CompressFormat.JPEG,100,stream);
 
         byte img[] = stream.toByteArray();
+
         nome = txtNome.getText().toString();
         habilidade = txtHabilidade.getText().toString();
         tipo = txtTipo.getText().toString();
+        stringIMG = img.toString();
 
+        Pokemon pokemon = new Pokemon();
+        pokemon.setFoto(stringIMG);
+        pokemon.setNome(nome);
+        pokemon.setHabilidades(habilidade);
+        pokemon.setTipo(tipo);
 
+        Call<Void> call = new RetrofitConfig().getPKService().createPokemon(pokemon);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Toast.makeText(getBaseContext(),"Pokemon Inserido com Sucesso",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(getBaseContext(),"Erro ao inserir Pokemon",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void tirarFoto(View view){
