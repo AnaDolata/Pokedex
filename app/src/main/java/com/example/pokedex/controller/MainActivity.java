@@ -2,6 +2,8 @@ package com.example.pokedex.controller;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
@@ -9,12 +11,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.pokedex.R;
 import com.example.pokedex.adapter.AdapterHabilidade;
+import com.example.pokedex.adapter.AdapterListaTopHabilidades;
+import com.example.pokedex.adapter.AdapterListaTopTipos;
 import com.example.pokedex.adapter.AdapterTipo;
 import com.example.pokedex.model.Pokemon;
+import com.example.pokedex.model.TopPokemons;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +31,8 @@ public class MainActivity extends AppCompatActivity {
   RecyclerView recyclerViewTipo;
   RecyclerView recyclerViewHabilidade;
 
-  List<Pokemon> listPokemon = new ArrayList<>();
+  List<TopPokemons> listTopTipo = new ArrayList<>();
+  List<TopPokemons> listTopHab = new ArrayList<>();
 
   @SuppressLint("MissingInflatedId")
   @Override
@@ -33,18 +40,30 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    recyclerViewTipo = findViewById(R.id.viewTiposPokemon);
-    recyclerViewHabilidade = findViewById(R.id.viewHabilidadesPokemon);
+    recyclerViewTipo = findViewById(R.id.recyclerViewTopTipos);
+    recyclerViewHabilidade = findViewById(R.id.recyclerViewTopHabilidades);
 
     this.createPokemonType();
-    AdapterTipo adapter = new AdapterTipo(listPokemon);
+
+    AdapterListaTopTipos adapterTipo = new AdapterListaTopTipos(listTopTipo);
+
+    RecyclerView.LayoutManager layoutManager =
+            new LinearLayoutManager(getApplicationContext());
+
+    recyclerViewTipo.setLayoutManager(layoutManager);
     recyclerViewTipo.setHasFixedSize(true);
-    recyclerViewTipo.setAdapter(adapter);
+    recyclerViewTipo.addItemDecoration(
+            new DividerItemDecoration(this, LinearLayout.VERTICAL));
+    recyclerViewTipo.setAdapter(adapterTipo);
 
     this.createPokemonHability();
-    AdapterHabilidade adapterHabilidade = new AdapterHabilidade(listPokemon);
-    recyclerViewTipo.setHasFixedSize(true);
-    recyclerViewTipo.setAdapter(adapterHabilidade);
+    AdapterListaTopHabilidades adapterHabilidade = new AdapterListaTopHabilidades(listTopHab);
+
+    recyclerViewHabilidade.setLayoutManager(layoutManager);
+    recyclerViewHabilidade.setHasFixedSize(true);
+    recyclerViewHabilidade.addItemDecoration(
+            new DividerItemDecoration(this, LinearLayout.VERTICAL));
+    recyclerViewHabilidade.setAdapter(adapterHabilidade);
 
   }
 
@@ -79,10 +98,12 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void createPokemonType(){
+    listTopTipo.add(new TopPokemons("Tipo", 2));
 
   }
 
   public void createPokemonHability(){
+    listTopHab.add(new TopPokemons("Hab", 2));
 
   }
 }

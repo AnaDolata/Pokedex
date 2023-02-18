@@ -154,7 +154,7 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/viewTiposPokemon"
+            android:id="@+id/recyclerViewTopTipos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -242,7 +242,7 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/viewHabilidadesPokemon"
+            android:id="@+id/recyclerViewTopHabilidades"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
