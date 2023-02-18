@@ -1,18 +1,18 @@
-package com.example.pokedex;
+package com.example.pokedex.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.example.pokedex.adapter.AdapterTipo;
+import com.example.pokedex.R;
+import com.example.pokedex.adapter.AdapterHabilidade;
 import com.example.pokedex.apiPokemon.RetrofitConfig;
 import com.example.pokedex.model.Pokemon;
 
@@ -23,44 +23,43 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PesquisaTipoActivity extends AppCompatActivity {
+public class PesquisaHabilidadeActivity extends AppCompatActivity {
 
-  RecyclerView recyclerViewTipo;
+  RecyclerView recyclerViewHabilidade;
   EditText input;
   List<Pokemon> pokemonList = new ArrayList<>();
-  AdapterTipo adapter;
+  AdapterHabilidade adapter;
 
-  @SuppressLint("MissingInflatedId")
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_pesquisa_tipo);
+    setContentView(R.layout.activity_pesquisa_habilidade);
 
   }
 
   public void search(View view) {
-    input = findViewById(R.id.editTextType);
+    input = findViewById(R.id.editTextAbility);
 
     if (input.length() == 0) {
-      Toast.makeText(this, "Digite um tipo", Toast.LENGTH_SHORT).show();
+      Toast.makeText(this, "Digite uma habilidade", Toast.LENGTH_SHORT).show();
     } else {
 
-      recyclerViewTipo = findViewById(R.id.recyclerViewType);
+      recyclerViewHabilidade = findViewById(R.id.recyclerViewAbility);
       RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
 
-      Call<List<Pokemon>> call = new RetrofitConfig().getPKService().getPokemonTipo(input.getText().toString());
+      Call<List<Pokemon>> call = new RetrofitConfig().getPKService().getPokemonHabilidade(input.getText().toString());
       call.enqueue(new Callback<List<Pokemon>>() {
         @Override
         public void onResponse(Call<List<Pokemon>> call, Response<List<Pokemon>> response) {
           if (response.isSuccessful()) {
             pokemonList = response.body();
-            adapter = new AdapterTipo(pokemonList);
-            recyclerViewTipo.setLayoutManager(layoutManager);
-            recyclerViewTipo.setHasFixedSize(true);
-            recyclerViewTipo.addItemDecoration(new DividerItemDecoration(PesquisaTipoActivity.this, LinearLayout.VERTICAL));
-            recyclerViewTipo.setAdapter(adapter);
+            adapter = new AdapterHabilidade(pokemonList);
+            recyclerViewHabilidade.setLayoutManager(layoutManager);
+            recyclerViewHabilidade.setHasFixedSize(true);
+            recyclerViewHabilidade.addItemDecoration(new DividerItemDecoration(PesquisaHabilidadeActivity.this, LinearLayout.VERTICAL));
+            recyclerViewHabilidade.setAdapter(adapter);
           } else {
-            Toast.makeText(PesquisaTipoActivity.this, "Nenhum Pokemon encontrado", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PesquisaHabilidadeActivity.this, "Nenhum Pokemon encontrado", Toast.LENGTH_SHORT).show();
           }
         }
 

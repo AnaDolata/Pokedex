@@ -1,8 +1,10 @@
-package com.example.pokedex;
+package com.example.pokedex.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.pokedex.R;
 
 public class CadastroActivity extends AppCompatActivity {
 

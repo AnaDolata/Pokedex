@@ -1,9 +1,7 @@
-package com.example.pokedex;
+package com.example.pokedex.controller;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
@@ -11,9 +9,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.pokedex.R;
 import com.example.pokedex.adapter.AdapterHabilidade;
 import com.example.pokedex.adapter.AdapterTipo;
 import com.example.pokedex.model.Pokemon;

@@ -1,4 +1,4 @@
-package com.example.pokedex;
+package com.example.pokedex.controller;
 
 
 import android.content.Context;
