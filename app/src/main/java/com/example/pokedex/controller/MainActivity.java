@@ -47,10 +47,10 @@ public class MainActivity extends AppCompatActivity {
 
     AdapterListaTopTipos adapterTipo = new AdapterListaTopTipos(listTopTipo);
 
-    RecyclerView.LayoutManager layoutManager =
+    RecyclerView.LayoutManager layoutManager1 =
             new LinearLayoutManager(getApplicationContext());
 
-    recyclerViewTipo.setLayoutManager(layoutManager);
+    recyclerViewTipo.setLayoutManager(layoutManager1);
     recyclerViewTipo.setHasFixedSize(true);
     recyclerViewTipo.addItemDecoration(
             new DividerItemDecoration(this, LinearLayout.VERTICAL));
@@ -59,7 +59,10 @@ public class MainActivity extends AppCompatActivity {
     this.createPokemonHability();
     AdapterListaTopHabilidades adapterHabilidade = new AdapterListaTopHabilidades(listTopHab);
 
-    recyclerViewHabilidade.setLayoutManager(layoutManager);
+    RecyclerView.LayoutManager layoutManager2 =
+            new LinearLayoutManager(getApplicationContext());
+
+    recyclerViewHabilidade.setLayoutManager(layoutManager2);
     recyclerViewHabilidade.setHasFixedSize(true);
     recyclerViewHabilidade.addItemDecoration(
             new DividerItemDecoration(this, LinearLayout.VERTICAL));
