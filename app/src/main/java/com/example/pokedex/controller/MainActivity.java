@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     setContentView(R.layout.activity_main);
 
     recyclerViewTipo = findViewById(R.id.viewTiposPokemon);
-    recyclerViewHabilidade = findViewById(R.id.viewHobilidadesPokemon);
+    recyclerViewHabilidade = findViewById(R.id.viewHabilidadesPokemon);
 
     this.createPokemonType();
     AdapterTipo adapter = new AdapterTipo(listPokemon);

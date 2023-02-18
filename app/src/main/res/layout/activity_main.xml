@@ -10,6 +10,8 @@
     android:orientation="vertical"
     tools:context=".controller.MainActivity">
 
+    <!-- row 1 -->
+
     <TextView
         android:id="@+id/textViewDashboard"
         android:layout_width="fill_parent"
@@ -21,11 +23,15 @@
         android:textColor="@color/white"
         android:textSize="25sp" />
 
+    <!-- row 2 -->
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="2">
+
+        <!-- row 2 / col 1-->
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -45,6 +51,8 @@
                 android:textSize="16sp" />
 
         </LinearLayout>
+
+        <!-- row 2 / col 2 -->
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -67,73 +75,67 @@
 
     </LinearLayout>
 
+    <!-- row 3 -->
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="1">
 
+        <TextView
+            android:id="@+id/txtTopTipos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#52FFFFFF"
+            android:padding="8dp"
+            android:text="Top 3 Tipos de Pokemon"
+            android:textAlignment="viewStart"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <!-- row 4 -->
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/txtTopTipos"
+                android:id="@+id/textViewTipo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#52FFFFFF"
                 android:padding="8dp"
-                android:text="Top 3 Tipos de Pokemon"
+                android:text="Tipo Pokemóns"
                 android:textAlignment="viewStart"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
+
         </LinearLayout>
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1">
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/viewTiposPokemon"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1">
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/txtTopHab"
+                android:id="@+id/textViewTipoQnt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#52FFFFFF"
                 android:padding="8dp"
-                android:text="Top 3 Habilidades"
+                android:text="Quantidade"
                 android:textAlignment="viewStart"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
@@ -142,24 +144,107 @@
 
     </LinearLayout>
 
+    <!-- row 5 / Recycle -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/viewTiposPokemon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+    <!-- row 5 -->
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="1">
 
+
+        <TextView
+            android:id="@+id/txtTopHab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#52FFFFFF"
+            android:padding="8dp"
+            android:text="Top 3 Habilidades"
+            android:textAlignment="viewStart"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+
+    </LinearLayout>
+
+    <!-- row 6 -->
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/viewHabilidadesPokemon"
+            <TextView
+                android:id="@+id/textViewHab"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:background="#52FFFFFF"
+                android:padding="8dp"
+                android:text="Habilidades Pokemóns"
+                android:textAlignment="viewStart"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewHabQnt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#52FFFFFF"
+                android:padding="8dp"
+                android:text="Quantidade"
+                android:textAlignment="viewStart"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- row 7 / Recycle -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/viewHabilidadesPokemon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
