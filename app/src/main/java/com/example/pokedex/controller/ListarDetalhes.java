@@ -18,10 +18,13 @@ import com.example.pokedex.R;
 import com.example.pokedex.apiPokemon.RetrofitConfig;
 import com.example.pokedex.model.Pokemon;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.stream.Stream;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,6 +37,9 @@ public class ListarDetalhes extends AppCompatActivity {
   Bitmap bitmap;
   String idPokemon;
   String stringIMG;
+
+  String recebeIMG;
+
   private final int REQUEST_CAMERA_CODE = 4;
 
   @SuppressLint({"MissingInflatedId", "ResourceType"})
@@ -72,7 +78,11 @@ public class ListarDetalhes extends AppCompatActivity {
               nome.setText(pokemon.getNome());
               tipo.setText(pokemon.getTipo());
               habilidade.setText(pokemon.getHabilidades());
-              imagem.setImageResource(R.drawable.img);
+
+              byte imagemByte[] = pokemon.getFoto().getBytes();
+
+              // descobrir como passar para bitmap
+
             }
           }
 
@@ -87,14 +97,12 @@ public class ListarDetalhes extends AppCompatActivity {
 
   public void save(View view){
   try {
-    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+      ByteArrayOutputStream stream = new ByteArrayOutputStream();
+      bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+      byte img[] = stream.toByteArray();
+      Intent i = new Intent(ListarDetalhes.this, ListarActivity.class);
+      stringIMG = img.toString();
 
-    byte img[] = stream.toByteArray();
-
-    Intent i = new Intent(ListarDetalhes.this, ListarActivity.class);
-
-    stringIMG = img.toString();
     String novoNome = nome.getText().toString();
     String novaHabilidade = habilidade.getText().toString();
     String novoTipo = tipo.getText().toString();
@@ -125,8 +133,6 @@ public class ListarDetalhes extends AppCompatActivity {
       }
     });
 
-    startActivity(i);
-    finish();
   }catch (Exception e){
     Toast.makeText(ListarDetalhes.this, "Escolha uma foto!", Toast.LENGTH_SHORT).show();
   }

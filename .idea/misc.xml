@@ -8,6 +8,14 @@
         <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/activity_listar_detalhes.xml" value="0.36666666666666664" />
         <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/activity_login.xml" value="0.36666666666666664" />
         <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/activity_main.xml" value="0.321875" />
+        <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/activity_pesquisa_habilidade.xml" value="0.36666666666666664" />
+        <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/activity_pesquisa_tipo.xml" value="0.36666666666666664" />
+        <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/activity_splash_screen.xml" value="0.36666666666666664" />
+        <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/adapter_list_habilidade.xml" value="0.36666666666666664" />
+        <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/adapter_list_lista_todos.xml" value="0.36666666666666664" />
+        <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/adapter_list_tipo.xml" value="0.36666666666666664" />
+        <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/adapter_list_top_habilidades.xml" value="0.36666666666666664" />
+        <entry key="..\:/ANDROID/Pokedex/app/src/main/res/layout/adapter_list_top_tipos.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>
