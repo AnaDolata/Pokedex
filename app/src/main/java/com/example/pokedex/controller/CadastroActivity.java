@@ -75,11 +75,17 @@ public class CadastroActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 Toast.makeText(getBaseContext(),"Pokemon Inserido com Sucesso",Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(CadastroActivity.this, MainActivity.class);
+                startActivity(i);
+                finish();
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(getBaseContext(),"Erro ao inserir Pokemon",Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(CadastroActivity.this, MainActivity.class);
+                startActivity(i);
+                finish();
             }
         });
     }

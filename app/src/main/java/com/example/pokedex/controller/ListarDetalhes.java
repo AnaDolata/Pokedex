@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -17,6 +18,7 @@ import com.example.pokedex.R;
 import com.example.pokedex.apiPokemon.RetrofitConfig;
 import com.example.pokedex.model.Pokemon;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,6 +33,8 @@ public class ListarDetalhes extends AppCompatActivity {
   ImageView imagem;
   Bitmap bitmap;
   String idPokemon;
+  String stringIMG;
+  private final int REQUEST_CAMERA_CODE = 4;
 
   @SuppressLint({"MissingInflatedId", "ResourceType"})
   @Override
@@ -46,10 +50,8 @@ public class ListarDetalhes extends AppCompatActivity {
     imagem.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-        i.setType("image/*");
-        i.addCategory(Intent.CATEGORY_OPENABLE);
-        startActivityForResult(i, 1);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent,REQUEST_CAMERA_CODE);
       }
     });
 
@@ -84,10 +86,51 @@ public class ListarDetalhes extends AppCompatActivity {
   }
 
   public void save(View view){
-    //atualizar a imagem tbmm - no método onActivityResult
+  try {
+    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+
+    byte img[] = stream.toByteArray();
+
     Intent i = new Intent(ListarDetalhes.this, ListarActivity.class);
+
+    stringIMG = img.toString();
+    String novoNome = nome.getText().toString();
+    String novaHabilidade = habilidade.getText().toString();
+    String novoTipo = tipo.getText().toString();
+
+    Pokemon pokemon = new Pokemon();
+
+    pokemon.setTipo(novoTipo);
+    pokemon.setHabilidades(novaHabilidade);
+    pokemon.setFoto(stringIMG);
+    pokemon.setNome(novoNome);
+
+    Call<Void> call = new RetrofitConfig().getPKService().updatePokemon(Long.parseLong(idPokemon), pokemon);
+
+    call.enqueue(new Callback<Void>() {
+      @Override
+      public void onResponse(Call<Void> call, Response<Void> response) {
+        if (response.isSuccessful()) {
+          Toast.makeText(ListarDetalhes.this, "Pokemon atualizado!", Toast.LENGTH_SHORT).show();
+          Intent i = new Intent(ListarDetalhes.this, ListarActivity.class);
+          startActivity(i);
+          finish();
+        }
+      }
+
+      @Override
+      public void onFailure(Call<Void> call, Throwable t) {
+        Toast.makeText(ListarDetalhes.this, "Erro!", Toast.LENGTH_SHORT).show();
+      }
+    });
+
     startActivity(i);
     finish();
+  }catch (Exception e){
+    Toast.makeText(ListarDetalhes.this, "Escolha uma foto!", Toast.LENGTH_SHORT).show();
+  }
+
   }
 
   public void delete(View view){
@@ -112,26 +155,10 @@ public class ListarDetalhes extends AppCompatActivity {
 
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
-    InputStream stream = null;
-    if (requestCode == 1 && resultCode == RESULT_OK) {
-      try {
-        if (bitmap != null) {
-          bitmap.recycle();
-        }
-        stream = getContentResolver().openInputStream(data.getData());
-        bitmap = BitmapFactory.decodeStream(stream);
+    if(resultCode == RESULT_OK){
+      if(requestCode == REQUEST_CAMERA_CODE){
+        bitmap = (Bitmap) data.getExtras().get("data");
         imagem.setImageBitmap(bitmap);
-        //salvar no banco aqui
-      }
-      catch(FileNotFoundException e) {
-        e.printStackTrace();
-      } finally {
-        if (stream != null)
-          try {
-            stream.close();
-          } catch (IOException e) {
-            e.printStackTrace();
-          }
       }
     }
   }

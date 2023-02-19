@@ -10,6 +10,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -32,4 +33,7 @@ public interface PKService {
 
   @POST("pokemons")
   Call<Void> createPokemon(@Body Pokemon pokemon);
+
+  @PUT("pokemons/{id}")
+  Call<Void> updatePokemon(@Path("id") long id, @Body Pokemon pokemon);
 }
