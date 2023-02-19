@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
@@ -23,6 +25,7 @@ import com.example.pokedex.apiPokemon.RetrofitConfig;
 import com.example.pokedex.model.Pokemon;
 import com.example.pokedex.model.TopPokemons;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,12 +41,9 @@ public class MainActivity extends AppCompatActivity {
 
   List<TopPokemons> listTopTipo = new ArrayList<>();
   List<TopPokemons> listTopHab = new ArrayList<>();
+  List<TopPokemons> listQuantidade = new ArrayList<>();
 
-  List<Pokemon> listPokemon = new ArrayList<>();
-  List<Pokemon> listPokemonTipo = new ArrayList<>();
-  List<Pokemon> listPokemonHab = new ArrayList<>();
-
-  int quantidadePokemons = 0;
+  int quantidadePokemons;
 
   @SuppressLint("MissingInflatedId")
   @Override
@@ -51,14 +51,26 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
+    this.createPokemonType();
+    this.countPokemon();
+    this.createPokemonHability();
+
+    Log.i("debug","test3");
+
     total = findViewById(R.id.txtNumeroPokemons);
 
     recyclerViewTipo = findViewById(R.id.recyclerViewTopTipos);
     recyclerViewHabilidade = findViewById(R.id.recyclerViewTopHabilidades);
 
-    //this.countPokemon();
 
-    this.createPokemonType();
+
+    if(!listQuantidade.isEmpty()) {
+      quantidadePokemons = listQuantidade.get(0).getQuantidade();
+    }else{
+      quantidadePokemons = 0;
+    }
+
+
 
     AdapterListaTopTipos adapterTipo = new AdapterListaTopTipos(listTopTipo);
 
@@ -71,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             new DividerItemDecoration(this, LinearLayout.VERTICAL));
     recyclerViewTipo.setAdapter(adapterTipo);
 
-    this.createPokemonHability();
+
     AdapterListaTopHabilidades adapterHabilidade = new AdapterListaTopHabilidades(listTopHab);
 
     RecyclerView.LayoutManager layoutManager2 =
@@ -117,68 +129,53 @@ public class MainActivity extends AppCompatActivity {
     return super.onOptionsItemSelected(item);
   }
 
-//  public void countPokemon(){
-//    Call<List<Pokemon>> call = new RetrofitConfig().getPKService().getPokemonList();
-//    call.enqueue(new Callback<List<Pokemon>>() {
-//      @Override
-//      public void onResponse(Call<List<Pokemon>> call, Response<List<Pokemon>> response) {
-//        if (response.isSuccessful()) {
-//          listPokemon = response.body();
-//        }
-//        if(!listPokemon.isEmpty()) {
-//          quantidadePokemons = 0;
-//          for (Pokemon pok : listPokemon) {
-//            quantidadePokemons++;
-//          }
-//        }
-//      }
-//      @Override
-//      public void onFailure(Call<List<Pokemon>> call, Throwable t) {
-//
-//      }
-//    });
-//  }
+  public void countPokemon(){
+    Log.i("debug","test4");
+    Call<List<TopPokemons>> call = new RetrofitConfig().getPKService().getPokemonQuantidade();
+    call.enqueue(new Callback<List<TopPokemons>>() {
+      @Override
+      public void onResponse(Call<List<TopPokemons>> call, Response<List<TopPokemons>> response) {
+        if (response.isSuccessful()) {
+          listQuantidade = response.body();
+          Log.i("debug","test");
+        }
+        Log.i("debug","test2");
+      }
+      @Override
+      public void onFailure(Call<List<TopPokemons>> call, Throwable t) {
+        Log.i("debug","test5");
+      }
+    });
+  }
 
   public void createPokemonType(){
-    Call<List<Pokemon>> call = new RetrofitConfig().getPKService().getPokemonList();
-    call.enqueue(new Callback<List<Pokemon>>() {
+    Call<List<TopPokemons>> call = new RetrofitConfig().getPKService().getPokemonTipoTop();
+    call.enqueue(new Callback<List<TopPokemons>>() {
       @Override
-      public void onResponse(Call<List<Pokemon>> call, Response<List<Pokemon>> response) {
+      public void onResponse(Call<List<TopPokemons>> call, Response<List<TopPokemons>> response) {
         if (response.isSuccessful()) {
-          listPokemonTipo = response.body();
-        }
-        if(!listPokemonTipo.isEmpty()) {
-          for (Pokemon pok : listPokemonTipo) {
-            listTopTipo.add(new TopPokemons(pok.getTipo(), 1));
-            quantidadePokemons++;
-          }
+          listTopTipo = response.body();
         }
       }
-
       @Override
-      public void onFailure(Call<List<Pokemon>> call, Throwable t) {
+      public void onFailure(Call<List<TopPokemons>> call, Throwable t) {
 
       }
     });
   }
 
   public void createPokemonHability(){
-    Call<List<Pokemon>> call = new RetrofitConfig().getPKService().getPokemonList();
-    call.enqueue(new Callback<List<Pokemon>>() {
+    Call<List<TopPokemons>> call = new RetrofitConfig().getPKService().getPokemonHabilidadeTop();
+    call.enqueue(new Callback<List<TopPokemons>>() {
       @Override
-      public void onResponse(Call<List<Pokemon>> call, Response<List<Pokemon>> response) {
+      public void onResponse(Call<List<TopPokemons>> call, Response<List<TopPokemons>> response) {
         if (response.isSuccessful()) {
-          listPokemonHab = response.body();
-        }
-        if(!listPokemonHab.isEmpty()) {
-          for (Pokemon pok : listPokemonHab) {
-            listTopHab.add(new TopPokemons(pok.getHabilidades(), 1));
-          }
+          listTopHab = response.body();
         }
       }
 
       @Override
-      public void onFailure(Call<List<Pokemon>> call, Throwable t) {
+      public void onFailure(Call<List<TopPokemons>> call, Throwable t) {
 
       }
     });

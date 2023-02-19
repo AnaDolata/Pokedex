@@ -1,6 +1,7 @@
 package com.example.pokedex.apiPokemon;
 
 import com.example.pokedex.model.Pokemon;
+import com.example.pokedex.model.TopPokemons;
 
 import java.util.List;
 
@@ -19,8 +20,17 @@ public interface PKService {
   @GET("pokemons/tipo")
   Call<List<Pokemon>> getPokemonTipo(@Query("tipo") String tipo);
 
+  @GET("pokemons/tipo/top")
+  Call<List<TopPokemons>> getPokemonTipoTop();
+
   @GET("pokemons/habilidade")
   Call<List<Pokemon>> getPokemonHabilidade(@Query("habilidade") String hab);
+
+  @GET("pokemons/habilidade/top")
+  Call<List<TopPokemons>> getPokemonHabilidadeTop();
+
+  @GET("pokemons/quantidade")
+  Call<List<TopPokemons>> getPokemonQuantidade();
 
   @GET("pokemons")
   Call<List<Pokemon>> getPokemonList();
