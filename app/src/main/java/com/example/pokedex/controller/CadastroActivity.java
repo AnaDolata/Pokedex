@@ -13,6 +13,7 @@ import android.media.MediaActionSound;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -61,7 +62,7 @@ public class CadastroActivity extends AppCompatActivity {
         nome = txtNome.getText().toString();
         habilidade = txtHabilidade.getText().toString();
         tipo = txtTipo.getText().toString();
-        stringIMG = img.toString();
+        stringIMG = Base64.encodeToString(img,Base64.DEFAULT);
 
         Pokemon pokemon = new Pokemon();
         pokemon.setFoto(stringIMG);

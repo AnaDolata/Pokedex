@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.example.pokedex.R;
 import com.example.pokedex.apiPokemon.RetrofitConfig;
 import com.example.pokedex.model.Pokemon;
+import com.google.gson.Gson;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -78,11 +80,12 @@ public class ListarDetalhes extends AppCompatActivity {
               nome.setText(pokemon.getNome());
               tipo.setText(pokemon.getTipo());
               habilidade.setText(pokemon.getHabilidades());
-
-              byte imagemByte[] = pokemon.getFoto().getBytes();
-
-              // descobrir como passar para bitmap
-
+              String jsonString = "{'image': 'base64-encoded-byte-array'}";
+              Gson gson = new Gson();
+              Pokemon myObject = gson.fromJson(jsonString, Pokemon.class);
+              byte[] img = Base64.decode(myObject.getFoto(), Base64.DEFAULT);
+              Bitmap bitmap = BitmapFactory.decodeByteArray(img,0,img.length);
+              imagem.setImageBitmap(bitmap);
             }
           }
 
@@ -97,22 +100,24 @@ public class ListarDetalhes extends AppCompatActivity {
 
   public void save(View view){
   try {
-      ByteArrayOutputStream stream = new ByteArrayOutputStream();
-      bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-      byte img[] = stream.toByteArray();
-      Intent i = new Intent(ListarDetalhes.this, ListarActivity.class);
-      stringIMG = img.toString();
 
-    String novoNome = nome.getText().toString();
-    String novaHabilidade = habilidade.getText().toString();
-    String novoTipo = tipo.getText().toString();
+      String novoNome = nome.getText().toString();
+      String novaHabilidade = habilidade.getText().toString();
+      String novoTipo = tipo.getText().toString();
+      Pokemon pokemon = new Pokemon();
 
-    Pokemon pokemon = new Pokemon();
+      if(bitmap != null) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte img[] = stream.toByteArray();
+        Intent i = new Intent(ListarDetalhes.this, ListarActivity.class);
+        stringIMG = Base64.encodeToString(img, Base64.DEFAULT);
+        pokemon.setFoto(stringIMG);
+      }
 
-    pokemon.setTipo(novoTipo);
-    pokemon.setHabilidades(novaHabilidade);
-    pokemon.setFoto(stringIMG);
-    pokemon.setNome(novoNome);
+      pokemon.setTipo(novoTipo);
+      pokemon.setHabilidades(novaHabilidade);
+      pokemon.setNome(novoNome);
 
     Call<Void> call = new RetrofitConfig().getPKService().updatePokemon(Long.parseLong(idPokemon), pokemon);
 
