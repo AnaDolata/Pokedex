@@ -54,7 +54,12 @@ public class CadastroActivity extends AppCompatActivity {
 
     public void cadastrar(View view) {
 
+        if(bit == null) {
+            Toast.makeText(this, "Precisa incluir uma foto antes", Toast.LENGTH_SHORT).show();
+            return;
+        }
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
         bit.compress(Bitmap.CompressFormat.JPEG, 100, stream);
 
         byte img[] = stream.toByteArray();
@@ -65,31 +70,36 @@ public class CadastroActivity extends AppCompatActivity {
         //stringIMG = img.toString();
         stringIMG = Base64.encodeToString(img, Base64.DEFAULT);
 
-        Pokemon pokemon = new Pokemon();
-        pokemon.setFoto(stringIMG);
-        pokemon.setNome(nome);
-        pokemon.setHabilidades(habilidade);
-        pokemon.setTipo(tipo);
+        if(nome.length() == 0 || habilidade.length() == 0 || tipo.length() == 0){
+            Toast.makeText(this, "Digite todos os valores para cadastrar!", Toast.LENGTH_SHORT).show();
+            return;
+        }else {
+            Pokemon pokemon = new Pokemon();
+            pokemon.setFoto(stringIMG);
+            pokemon.setNome(nome);
+            pokemon.setHabilidades(habilidade);
+            pokemon.setTipo(tipo);
 
-        Call<Void> call = new RetrofitConfig().getPKService().createPokemon(pokemon);
+            Call<Void> call = new RetrofitConfig().getPKService().createPokemon(pokemon);
 
-        call.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                Toast.makeText(getBaseContext(), "Pokemon Inserido com Sucesso", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(CadastroActivity.this, MainActivity.class);
-                startActivity(i);
-                finish();
-            }
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    Toast.makeText(getBaseContext(), "Pokemon Inserido com Sucesso", Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(CadastroActivity.this, MainActivity.class);
+                    startActivity(i);
+                    finish();
+                }
 
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(getBaseContext(), "Erro ao inserir Pokemon", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(CadastroActivity.this, MainActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Toast.makeText(getBaseContext(), "Erro ao inserir Pokemon", Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(CadastroActivity.this, MainActivity.class);
+                    startActivity(i);
+                    finish();
+                }
+            });
+        }
     }
 
     public void tirarFoto(View view) {

@@ -60,7 +60,6 @@ public class ListarActivity extends AppCompatActivity {
                                 @Override
                                 public void onItemClick(View view, int position) {
                                     Pokemon pokemon = list.get(position);
-                                    //Log.i("pokemon", String.valueOf(pokemon.getId()));
                                     //passar o id para intent
                                     Intent i = new Intent(ListarActivity.this, ListarDetalhes.class);
                                     Bundle params = new Bundle();
@@ -73,7 +72,6 @@ public class ListarActivity extends AppCompatActivity {
                                 @Override
                                 public void onItemLongClick(View view, int position) {
                                     Pokemon pokemon = list.get(position);
-                                    //Log.i("pokemon", String.valueOf(pokemon.getId()));
                                     //passar o id para intent
                                     Intent i = new Intent(ListarActivity.this, ListarDetalhes.class);
                                     Bundle params = new Bundle();

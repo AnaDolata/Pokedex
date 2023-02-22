@@ -39,9 +39,6 @@ public class ListarDetalhes extends AppCompatActivity {
   String idPokemon;
   String stringIMG;
 
-  String recebeIMG;
-
-
   private final int REQUEST_CAMERA_CODE = 4;
 
   @SuppressLint({"MissingInflatedId", "ResourceType"})
@@ -80,15 +77,10 @@ public class ListarDetalhes extends AppCompatActivity {
               nome.setText(pokemon.getNome());
               tipo.setText(pokemon.getTipo());
               habilidade.setText(pokemon.getHabilidades());
-              imagem.setImageResource(R.drawable.img);
-
-//              String jsonString = "{'image': 'base64-encoded-byte-array'}";
-//              Gson gson = new Gson();
-//              Pokemon myObject = gson.fromJson(jsonString, Pokemon.class);
-//              byte[] img = Base64.decode(myObject.getFoto(), Base64.DEFAULT);
-//              Bitmap bitmap = BitmapFactory.decodeByteArray(img,0,img.length);
-//              imagem.setImageBitmap(bitmap);
-
+              String base64 = pokemon.getFoto();
+              byte[] byteArr = Base64.decode(base64, 0);
+              Bitmap bitmap = BitmapFactory.decodeByteArray(byteArr, 0, byteArr.length);
+              imagem.setImageBitmap(bitmap);
             }
           }
 
@@ -106,7 +98,6 @@ public class ListarDetalhes extends AppCompatActivity {
       ByteArrayOutputStream stream = new ByteArrayOutputStream();
       bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
       byte img[] = stream.toByteArray();
-      //Intent i = new Intent(ListarDetalhes.this, ListarActivity.class);
       stringIMG = img.toString();
 
       String novoNome = nome.getText().toString();
@@ -116,9 +107,7 @@ public class ListarDetalhes extends AppCompatActivity {
       Pokemon pokemon = new Pokemon();
 
       if(bitmap != null) {
-        //ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        //byte img[] = stream.toByteArray();
         Intent i = new Intent(ListarDetalhes.this, ListarActivity.class);
         stringIMG = Base64.encodeToString(img, Base64.DEFAULT);
         pokemon.setFoto(stringIMG);
