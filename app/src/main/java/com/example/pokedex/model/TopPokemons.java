@@ -5,7 +5,8 @@ public class TopPokemons {
     private String item;
     private int quantidade;
 
-    public TopPokemons(){ };
+    public TopPokemons() {
+    }
 
     public TopPokemons(String item, int quantidade) {
         this.item = item;

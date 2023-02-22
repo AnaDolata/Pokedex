@@ -87,14 +87,12 @@ public class ListarDetalhes extends AppCompatActivity {
               Bitmap bitmap = BitmapFactory.decodeByteArray(img,0,img.length);
               imagem.setImageBitmap(bitmap);
             }
-          }
 
-          @Override
-          public void onFailure(Call<Pokemon> call, Throwable t) {
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
 
-          }
+            }
         });
-      }
     }
   }
 
@@ -155,22 +153,5 @@ public class ListarDetalhes extends AppCompatActivity {
           startActivity(i);
           finish();
         }
-      }
-
-      @Override
-      public void onFailure(Call<Void> call, Throwable t) {
-
-      }
-    });
-  }
-
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    if(resultCode == RESULT_OK){
-      if(requestCode == REQUEST_CAMERA_CODE){
-        bitmap = (Bitmap) data.getExtras().get("data");
-        imagem.setImageBitmap(bitmap);
-      }
     }
-  }
 }

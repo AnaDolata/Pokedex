@@ -52,10 +52,10 @@ public class CadastroActivity extends AppCompatActivity {
 
     }
 
-    public void cadastrar(View view){
+    public void cadastrar(View view) {
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bit.compress(Bitmap.CompressFormat.JPEG,100,stream);
+        bit.compress(Bitmap.CompressFormat.JPEG, 100, stream);
 
         byte img[] = stream.toByteArray();
 
@@ -75,7 +75,7 @@ public class CadastroActivity extends AppCompatActivity {
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                Toast.makeText(getBaseContext(),"Pokemon Inserido com Sucesso",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Pokemon Inserido com Sucesso", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(CadastroActivity.this, MainActivity.class);
                 startActivity(i);
                 finish();
@@ -83,7 +83,7 @@ public class CadastroActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(getBaseContext(),"Erro ao inserir Pokemon",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Erro ao inserir Pokemon", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(CadastroActivity.this, MainActivity.class);
                 startActivity(i);
                 finish();
@@ -91,18 +91,19 @@ public class CadastroActivity extends AppCompatActivity {
         });
     }
 
-    public void tirarFoto(View view){
+    public void tirarFoto(View view) {
 
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent,REQUEST_CAMERA_CODE);
+        startActivityForResult(intent, REQUEST_CAMERA_CODE);
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == RESULT_OK){
-            if(requestCode == REQUEST_CAMERA_CODE){
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_CAMERA_CODE) {
                 bit = (Bitmap) data.getExtras().get("data");
                 image.setImageBitmap(bit);
             }

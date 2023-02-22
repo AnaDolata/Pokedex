@@ -51,7 +51,6 @@ public class AdapterListaTodos extends RecyclerView.Adapter<AdapterListaTodos.My
 
   @Override
   public void onBindViewHolder(@NonNull AdapterListaTodos.MyViewHolder holder, int position) {
-
     Pokemon obj = list.get(position);
     holder.name.setText(obj.getNome());
     String jsonString = "{'image': 'base64-encoded-byte-array'}";
