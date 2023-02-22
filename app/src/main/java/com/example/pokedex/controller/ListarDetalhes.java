@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -80,9 +81,13 @@ public class ListarDetalhes extends AppCompatActivity {
               tipo.setText(pokemon.getTipo());
               habilidade.setText(pokemon.getHabilidades());
               imagem.setImageResource(R.drawable.img);
-              byte imagemByte[] = pokemon.getFoto().getBytes();
 
-              // descobrir como passar para bitmap
+//              String jsonString = "{'image': 'base64-encoded-byte-array'}";
+//              Gson gson = new Gson();
+//              Pokemon myObject = gson.fromJson(jsonString, Pokemon.class);
+//              byte[] img = Base64.decode(myObject.getFoto(), Base64.DEFAULT);
+//              Bitmap bitmap = BitmapFactory.decodeByteArray(img,0,img.length);
+//              imagem.setImageBitmap(bitmap);
 
             }
           }
@@ -101,7 +106,7 @@ public class ListarDetalhes extends AppCompatActivity {
       ByteArrayOutputStream stream = new ByteArrayOutputStream();
       bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
       byte img[] = stream.toByteArray();
-      Intent i = new Intent(ListarDetalhes.this, ListarActivity.class);
+      //Intent i = new Intent(ListarDetalhes.this, ListarActivity.class);
       stringIMG = img.toString();
 
       String novoNome = nome.getText().toString();
@@ -109,6 +114,15 @@ public class ListarDetalhes extends AppCompatActivity {
       String novoTipo = tipo.getText().toString();
 
       Pokemon pokemon = new Pokemon();
+
+      if(bitmap != null) {
+        //ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        //byte img[] = stream.toByteArray();
+        Intent i = new Intent(ListarDetalhes.this, ListarActivity.class);
+        stringIMG = Base64.encodeToString(img, Base64.DEFAULT);
+        pokemon.setFoto(stringIMG);
+      }
 
       pokemon.setTipo(novoTipo);
       pokemon.setHabilidades(novaHabilidade);
