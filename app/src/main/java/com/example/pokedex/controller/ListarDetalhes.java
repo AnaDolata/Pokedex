@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -18,7 +17,6 @@ import android.widget.Toast;
 import com.example.pokedex.R;
 import com.example.pokedex.apiPokemon.RetrofitConfig;
 import com.example.pokedex.model.Pokemon;
-import com.google.gson.Gson;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -42,6 +40,7 @@ public class ListarDetalhes extends AppCompatActivity {
 
   String recebeIMG;
 
+
   private final int REQUEST_CAMERA_CODE = 4;
 
   @SuppressLint({"MissingInflatedId", "ResourceType"})
@@ -59,14 +58,14 @@ public class ListarDetalhes extends AppCompatActivity {
       @Override
       public void onClick(View view) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent,REQUEST_CAMERA_CODE);
+        startActivityForResult(intent, REQUEST_CAMERA_CODE);
       }
     });
 
     Intent it = getIntent();
-    if(it != null){
+    if (it != null) {
       Bundle params = it.getExtras();
-      if(params != null) {
+      if (params != null) {
         String pokId = params.getString("id");
         idPokemon = pokId;
         Log.i("pokemon id", pokId);
@@ -75,55 +74,79 @@ public class ListarDetalhes extends AppCompatActivity {
         call.enqueue(new Callback<Pokemon>() {
           @Override
           public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {
-            if(response.isSuccessful()) {
+            if (response.isSuccessful()) {
               Pokemon pokemon = response.body();
               nome.setText(pokemon.getNome());
               tipo.setText(pokemon.getTipo());
               habilidade.setText(pokemon.getHabilidades());
-              String jsonString = "{'image': 'base64-encoded-byte-array'}";
-              Gson gson = new Gson();
-              Pokemon myObject = gson.fromJson(jsonString, Pokemon.class);
-              byte[] img = Base64.decode(myObject.getFoto(), Base64.DEFAULT);
-              Bitmap bitmap = BitmapFactory.decodeByteArray(img,0,img.length);
-              imagem.setImageBitmap(bitmap);
-            }
+              imagem.setImageResource(R.drawable.img);
+              byte imagemByte[] = pokemon.getFoto().getBytes();
 
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+              // descobrir como passar para bitmap
 
             }
+          }
+
+          @Override
+          public void onFailure(Call<Pokemon> call, Throwable t) {
+
+          }
         });
+      }
     }
   }
 
-  public void save(View view){
-  try {
+  public void save(View view) {
+    try {
+      ByteArrayOutputStream stream = new ByteArrayOutputStream();
+      bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+      byte img[] = stream.toByteArray();
+      Intent i = new Intent(ListarDetalhes.this, ListarActivity.class);
+      stringIMG = img.toString();
 
       String novoNome = nome.getText().toString();
       String novaHabilidade = habilidade.getText().toString();
       String novoTipo = tipo.getText().toString();
-      Pokemon pokemon = new Pokemon();
 
-      if(bitmap != null) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte img[] = stream.toByteArray();
-        Intent i = new Intent(ListarDetalhes.this, ListarActivity.class);
-        stringIMG = Base64.encodeToString(img, Base64.DEFAULT);
-        pokemon.setFoto(stringIMG);
-      }
+      Pokemon pokemon = new Pokemon();
 
       pokemon.setTipo(novoTipo);
       pokemon.setHabilidades(novaHabilidade);
+      pokemon.setFoto(stringIMG);
       pokemon.setNome(novoNome);
 
-    Call<Void> call = new RetrofitConfig().getPKService().updatePokemon(Long.parseLong(idPokemon), pokemon);
+      Call<Void> call = new RetrofitConfig().getPKService().updatePokemon(Long.parseLong(idPokemon), pokemon);
 
+      call.enqueue(new Callback<Void>() {
+        @Override
+        public void onResponse(Call<Void> call, Response<Void> response) {
+          if (response.isSuccessful()) {
+            Toast.makeText(ListarDetalhes.this, "Pokemon atualizado!", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(ListarDetalhes.this, ListarActivity.class);
+            startActivity(i);
+            finish();
+          }
+        }
+
+        @Override
+        public void onFailure(Call<Void> call, Throwable t) {
+          Toast.makeText(ListarDetalhes.this, "Erro!", Toast.LENGTH_SHORT).show();
+        }
+      });
+
+    } catch (Exception e) {
+      Toast.makeText(ListarDetalhes.this, "Escolha uma foto!", Toast.LENGTH_SHORT).show();
+    }
+
+  }
+
+  public void delete(View view) {
+    Call<Void> call = new RetrofitConfig().getPKService().deletePokemon(Long.parseLong(idPokemon));
     call.enqueue(new Callback<Void>() {
       @Override
       public void onResponse(Call<Void> call, Response<Void> response) {
         if (response.isSuccessful()) {
-          Toast.makeText(ListarDetalhes.this, "Pokemon atualizado!", Toast.LENGTH_SHORT).show();
+          Toast.makeText(ListarDetalhes.this, "Pokemon excluído!", Toast.LENGTH_SHORT).show();
           Intent i = new Intent(ListarDetalhes.this, ListarActivity.class);
           startActivity(i);
           finish();
@@ -132,26 +155,18 @@ public class ListarDetalhes extends AppCompatActivity {
 
       @Override
       public void onFailure(Call<Void> call, Throwable t) {
-        Toast.makeText(ListarDetalhes.this, "Erro!", Toast.LENGTH_SHORT).show();
+
       }
     });
-
-  }catch (Exception e){
-    Toast.makeText(ListarDetalhes.this, "Escolha uma foto!", Toast.LENGTH_SHORT).show();
   }
 
-  }
-
-  public void delete(View view){
-    Call<Void> call = new RetrofitConfig().getPKService().deletePokemon(Long.parseLong(idPokemon));
-    call.enqueue(new Callback<Void>() {
-      @Override
-      public void onResponse(Call<Void> call, Response<Void> response) {
-        if(response.isSuccessful()){
-          Toast.makeText(ListarDetalhes.this, "Pokemon excluído!", Toast.LENGTH_SHORT).show();
-          Intent i = new Intent(ListarDetalhes.this, ListarActivity.class);
-          startActivity(i);
-          finish();
-        }
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (resultCode == RESULT_OK) {
+      if (requestCode == REQUEST_CAMERA_CODE) {
+        bitmap = (Bitmap) data.getExtras().get("data");
+        imagem.setImageBitmap(bitmap);
+      }
     }
+  }
 }
