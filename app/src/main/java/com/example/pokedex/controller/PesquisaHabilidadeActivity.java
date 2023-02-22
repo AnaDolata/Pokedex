@@ -25,51 +25,51 @@ import retrofit2.Response;
 
 public class PesquisaHabilidadeActivity extends AppCompatActivity {
 
-  RecyclerView recyclerViewHabilidade;
-  EditText input;
-  List<Pokemon> pokemonList = new ArrayList<>();
-  AdapterHabilidade adapter;
+    RecyclerView recyclerViewHabilidade;
+    EditText input;
+    List<Pokemon> pokemonList = new ArrayList<>();
+    AdapterHabilidade adapter;
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_pesquisa_habilidade);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_pesquisa_habilidade);
 
-  }
-
-  public void search(View view) {
-    input = findViewById(R.id.editTextAbility);
-
-    if (input.length() == 0) {
-      Toast.makeText(this, "Digite uma habilidade", Toast.LENGTH_SHORT).show();
-    } else {
-
-      recyclerViewHabilidade = findViewById(R.id.recyclerViewAbility);
-      RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-
-      Call<List<Pokemon>> call = new RetrofitConfig().getPKService().getPokemonHabilidade(input.getText().toString());
-      call.enqueue(new Callback<List<Pokemon>>() {
-        @Override
-        public void onResponse(Call<List<Pokemon>> call, Response<List<Pokemon>> response) {
-          if (response.isSuccessful()) {
-            pokemonList = response.body();
-            adapter = new AdapterHabilidade(pokemonList);
-            recyclerViewHabilidade.setLayoutManager(layoutManager);
-            recyclerViewHabilidade.setHasFixedSize(true);
-            recyclerViewHabilidade.addItemDecoration(new DividerItemDecoration(PesquisaHabilidadeActivity.this, LinearLayout.VERTICAL));
-            recyclerViewHabilidade.setAdapter(adapter);
-          } else {
-            Toast.makeText(PesquisaHabilidadeActivity.this, "Nenhum Pokemon encontrado", Toast.LENGTH_SHORT).show();
-          }
-        }
-
-        @Override
-        public void onFailure(Call<List<Pokemon>> call, Throwable t) {
-
-        }
-      });
-
-      input.setText("");
     }
-  }
+
+    public void search(View view) {
+        input = findViewById(R.id.editTextAbility);
+
+        if (input.length() == 0) {
+            Toast.makeText(this, "Digite uma habilidade", Toast.LENGTH_SHORT).show();
+        } else {
+
+            recyclerViewHabilidade = findViewById(R.id.recyclerViewAbility);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+
+            Call<List<Pokemon>> call = new RetrofitConfig().getPKService().getPokemonHabilidade(input.getText().toString());
+            call.enqueue(new Callback<List<Pokemon>>() {
+                @Override
+                public void onResponse(Call<List<Pokemon>> call, Response<List<Pokemon>> response) {
+                    if (response.isSuccessful()) {
+                        pokemonList = response.body();
+                        adapter = new AdapterHabilidade(pokemonList);
+                        recyclerViewHabilidade.setLayoutManager(layoutManager);
+                        recyclerViewHabilidade.setHasFixedSize(true);
+                        recyclerViewHabilidade.addItemDecoration(new DividerItemDecoration(PesquisaHabilidadeActivity.this, LinearLayout.VERTICAL));
+                        recyclerViewHabilidade.setAdapter(adapter);
+                    } else {
+                        Toast.makeText(PesquisaHabilidadeActivity.this, "Nenhum Pokemon encontrado", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Pokemon>> call, Throwable t) {
+
+                }
+            });
+
+            input.setText("");
+        }
+    }
 }

@@ -45,16 +45,16 @@ public class AdapterListaTodos extends RecyclerView.Adapter<AdapterListaTodos.My
   }
 
   @Override
-  public void onBindViewHolder(@NonNull AdapterListaTodos.MyViewHolder holder, int position) {
-    Pokemon obj = list.get(position);
-    holder.name.setText(obj.getNome());
-
-    String jsonString = "{'image': 'base64-encoded-byte-array'}";
-    Gson gson = new Gson();
-    Pokemon myObject = gson.fromJson(jsonString, Pokemon.class);
-    byte[] img = Base64.decode(myObject.getFoto(), Base64.DEFAULT);
-    Bitmap bitmap = BitmapFactory.decodeByteArray(img,0,img.length);
-    holder.image.setImageBitmap(bitmap);
+  public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    Pokemon pokemon = list.get(position);
+    holder.name.setText(pokemon.getNome());
+    holder.image.setImageResource(R.drawable.img);
+//    String jsonString = "{'image': 'base64-encoded-byte-array'}";
+//    Gson gson = new Gson();
+//    Pokemon myObject = gson.fromJson(jsonString, Pokemon.class);
+//    byte[] img = Base64.decode(myObject.getFoto(), Base64.DEFAULT);
+//    Bitmap bitmap = BitmapFactory.decodeByteArray(img,0,img.length);
+//    holder.image.setImageBitmap(bitmap);
   }
 
   @Override
