@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -25,6 +27,7 @@ import java.io.ByteArrayOutputStream;
 import com.example.pokedex.R;
 import com.example.pokedex.apiPokemon.RetrofitConfig;
 import com.example.pokedex.model.Pokemon;
+import com.example.pokedex.model.Usuario;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,14 +40,15 @@ public class CadastroActivity extends AppCompatActivity {
     TextView txtNome, txtHabilidade, txtTipo;
     private final int REQUEST_CAMERA_CODE = 4;
     String stringIMG;
-    String nome, habilidade, tipo;
+    String nome, habilidade, tipo, usuario;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro);
-
+        Bundle bundle = getIntent().getExtras();
+        usuario = bundle.getString("usuario");
         image = (ImageView) findViewById(R.id.txtImagem);
         txtNome = (TextView) findViewById(R.id.txtNomeCadastro);
         txtHabilidade = (TextView) findViewById(R.id.txtHabilidadeCadastro);
@@ -67,11 +71,10 @@ public class CadastroActivity extends AppCompatActivity {
         nome = txtNome.getText().toString();
         habilidade = txtHabilidade.getText().toString();
         tipo = txtTipo.getText().toString();
-        //stringIMG = img.toString();
         stringIMG = Base64.encodeToString(img, Base64.DEFAULT);
 
         if(nome.length() == 0 || habilidade.length() == 0 || tipo.length() == 0){
-            Toast.makeText(this, "Digite todos os valores para cadastrar!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Digite todos as informações para cadastrar!", Toast.LENGTH_SHORT).show();
             return;
         }else {
             Pokemon pokemon = new Pokemon();
@@ -79,24 +82,53 @@ public class CadastroActivity extends AppCompatActivity {
             pokemon.setNome(nome);
             pokemon.setHabilidades(habilidade);
             pokemon.setTipo(tipo);
+            pokemon.setUsuario(usuario);
 
             Call<Void> call = new RetrofitConfig().getPKService().createPokemon(pokemon);
 
             call.enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
-                    Toast.makeText(getBaseContext(), "Pokemon Inserido com Sucesso", Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(CadastroActivity.this, MainActivity.class);
-                    startActivity(i);
-                    finish();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(CadastroActivity.this);
+                    builder.setMessage("Pokemon Inserido com Sucesso");
+                    builder.setTitle("Atenção");
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                            Intent in = new Intent(CadastroActivity.this, MainActivity.class);
+                            Bundle params = new Bundle();
+                            params.putString("usuario", String.valueOf(usuario));
+                            in.putExtras(params);
+                            startActivity(in);
+                            finish();
+                        }
+                    });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
                 }
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable t) {
-                    Toast.makeText(getBaseContext(), "Erro ao inserir Pokemon", Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(CadastroActivity.this, MainActivity.class);
-                    startActivity(i);
-                    finish();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(CadastroActivity.this);
+                    builder.setMessage("Erro ao inserir Pokemon");
+                    builder.setTitle("Atenção");
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                            Intent in = new Intent(CadastroActivity.this, MainActivity.class);
+                            Bundle params = new Bundle();
+                            params.putString("usuario", String.valueOf(usuario));
+                            in.putExtras(params);
+                            startActivity(in);
+                            finish();
+                        }
+                    });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
                 }
             });
         }

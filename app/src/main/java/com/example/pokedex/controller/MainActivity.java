@@ -44,10 +44,14 @@ public class MainActivity extends AppCompatActivity {
     List<TopPokemons> listQuantidade = new ArrayList<>();
 
     int quantidadePokemons;
+    String usuario;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setContentView(R.layout.activity_cadastro);
+        Bundle bundle = getIntent().getExtras();
+        usuario = bundle.getString("usuario");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -107,6 +111,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.add) {
             Intent intent = new Intent(getApplicationContext(), CadastroActivity.class);
+            Bundle params = new Bundle();
+            params.putString("usuario", String.valueOf(usuario));
+            intent.putExtras(params);
             startActivity(intent);
         }
         if (item.getItemId() == R.id.listar) {
@@ -122,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
         if (item.getItemId() == R.id.sair) {
-            finish();
+            finishAffinity();
         }
         return super.onOptionsItemSelected(item);
     }
