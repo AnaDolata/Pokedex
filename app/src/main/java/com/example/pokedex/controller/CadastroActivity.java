@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaActionSound;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import com.example.pokedex.R;
 import com.example.pokedex.apiPokemon.RetrofitConfig;
@@ -58,7 +61,7 @@ public class CadastroActivity extends AppCompatActivity {
 
     public void cadastrar(View view) {
 
-        if(bit == null) {
+        if (bit == null) {
             Toast.makeText(this, "Precisa incluir uma foto antes", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -73,10 +76,10 @@ public class CadastroActivity extends AppCompatActivity {
         tipo = txtTipo.getText().toString();
         stringIMG = Base64.encodeToString(img, Base64.DEFAULT);
 
-        if(nome.length() == 0 || habilidade.length() == 0 || tipo.length() == 0){
+        if (nome.length() == 0 || habilidade.length() == 0 || tipo.length() == 0) {
             Toast.makeText(this, "Digite todos as informações para cadastrar!", Toast.LENGTH_SHORT).show();
             return;
-        }else {
+        } else {
             Pokemon pokemon = new Pokemon();
             pokemon.setFoto(stringIMG);
             pokemon.setNome(nome);
@@ -141,6 +144,15 @@ public class CadastroActivity extends AppCompatActivity {
 
     }
 
+    public void escolherGaleria(View view) {
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        startActivityForResult(intent, 1);
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -148,6 +160,15 @@ public class CadastroActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CAMERA_CODE) {
                 bit = (Bitmap) data.getExtras().get("data");
+                image.setImageBitmap(bit);
+            } else{
+                InputStream stream = null;
+                try {
+                    stream = getContentResolver().openInputStream(data.getData());
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                bit = BitmapFactory.decodeStream(stream);
                 image.setImageBitmap(bit);
             }
         }
