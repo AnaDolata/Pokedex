@@ -5,10 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaActionSound;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,10 +24,13 @@ import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import com.example.pokedex.R;
 import com.example.pokedex.apiPokemon.RetrofitConfig;
 import com.example.pokedex.model.Pokemon;
+import com.example.pokedex.model.Usuario;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,14 +43,15 @@ public class CadastroActivity extends AppCompatActivity {
     TextView txtNome, txtHabilidade, txtTipo;
     private final int REQUEST_CAMERA_CODE = 4;
     String stringIMG;
-    String nome, habilidade, tipo;
+    String nome, habilidade, tipo, usuario;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro);
-
+        Bundle bundle = getIntent().getExtras();
+        usuario = bundle.getString("usuario");
         image = (ImageView) findViewById(R.id.txtImagem);
         txtNome = (TextView) findViewById(R.id.txtNomeCadastro);
         txtHabilidade = (TextView) findViewById(R.id.txtHabilidadeCadastro);
@@ -54,7 +61,12 @@ public class CadastroActivity extends AppCompatActivity {
 
     public void cadastrar(View view) {
 
+        if (bit == null) {
+            Toast.makeText(this, "Precisa incluir uma foto antes", Toast.LENGTH_SHORT).show();
+            return;
+        }
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
         bit.compress(Bitmap.CompressFormat.JPEG, 100, stream);
 
         byte img[] = stream.toByteArray();
@@ -62,34 +74,67 @@ public class CadastroActivity extends AppCompatActivity {
         nome = txtNome.getText().toString();
         habilidade = txtHabilidade.getText().toString();
         tipo = txtTipo.getText().toString();
-        //stringIMG = img.toString();
         stringIMG = Base64.encodeToString(img, Base64.DEFAULT);
 
-        Pokemon pokemon = new Pokemon();
-        pokemon.setFoto(stringIMG);
-        pokemon.setNome(nome);
-        pokemon.setHabilidades(habilidade);
-        pokemon.setTipo(tipo);
+        if (nome.length() == 0 || habilidade.length() == 0 || tipo.length() == 0) {
+            Toast.makeText(this, "Digite todos as informações para cadastrar!", Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            Pokemon pokemon = new Pokemon();
+            pokemon.setFoto(stringIMG);
+            pokemon.setNome(nome);
+            pokemon.setHabilidades(habilidade);
+            pokemon.setTipo(tipo);
+            pokemon.setUsuario(usuario);
 
-        Call<Void> call = new RetrofitConfig().getPKService().createPokemon(pokemon);
+            Call<Void> call = new RetrofitConfig().getPKService().createPokemon(pokemon);
 
-        call.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                Toast.makeText(getBaseContext(), "Pokemon Inserido com Sucesso", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(CadastroActivity.this, MainActivity.class);
-                startActivity(i);
-                finish();
-            }
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(CadastroActivity.this);
+                    builder.setMessage("Pokemon Inserido com Sucesso");
+                    builder.setTitle("Atenção");
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                            Intent in = new Intent(CadastroActivity.this, MainActivity.class);
+                            Bundle params = new Bundle();
+                            params.putString("usuario", String.valueOf(usuario));
+                            in.putExtras(params);
+                            startActivity(in);
+                            finish();
+                        }
+                    });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }
 
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(getBaseContext(), "Erro ao inserir Pokemon", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(CadastroActivity.this, MainActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(CadastroActivity.this);
+                    builder.setMessage("Erro ao inserir Pokemon");
+                    builder.setTitle("Atenção");
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                            Intent in = new Intent(CadastroActivity.this, MainActivity.class);
+                            Bundle params = new Bundle();
+                            params.putString("usuario", String.valueOf(usuario));
+                            in.putExtras(params);
+                            startActivity(in);
+                            finish();
+                        }
+                    });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }
+            });
+        }
     }
 
     public void tirarFoto(View view) {
@@ -99,6 +144,15 @@ public class CadastroActivity extends AppCompatActivity {
 
     }
 
+    public void escolherGaleria(View view) {
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        startActivityForResult(intent, 1);
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -106,6 +160,15 @@ public class CadastroActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CAMERA_CODE) {
                 bit = (Bitmap) data.getExtras().get("data");
+                image.setImageBitmap(bit);
+            } else{
+                InputStream stream = null;
+                try {
+                    stream = getContentResolver().openInputStream(data.getData());
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                bit = BitmapFactory.decodeStream(stream);
                 image.setImageBitmap(bit);
             }
         }

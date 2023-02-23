@@ -49,6 +49,9 @@ public class Login extends AppCompatActivity {
                 public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                     if (response.isSuccessful()) {
                         Intent i = new Intent(Login.this, MainActivity.class);
+                        Bundle params = new Bundle();
+                        params.putString("usuario", String.valueOf(usuario.getLogin()));
+                        i.putExtras(params);
                         startActivity(i);
                         finish();
                     } else {

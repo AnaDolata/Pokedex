@@ -41,13 +41,17 @@ public class MainActivity extends AppCompatActivity {
 
     List<TopPokemons> listTopTipo = new ArrayList<>();
     List<TopPokemons> listTopHab = new ArrayList<>();
-    List<TopPokemons> listQuantidade = new ArrayList<>();
+    TopPokemons quantidade = new TopPokemons();
 
     int quantidadePokemons;
+    String usuario;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setContentView(R.layout.activity_cadastro);
+        Bundle bundle = getIntent().getExtras();
+        usuario = bundle.getString("usuario");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -55,46 +59,15 @@ public class MainActivity extends AppCompatActivity {
         this.countPokemon();
         this.createPokemonHability();
 
-        Log.i("debug", "test3");
-
         total = findViewById(R.id.txtNumeroPokemons);
+    }
 
-        recyclerViewTipo = findViewById(R.id.recyclerViewTopTipos);
-        recyclerViewHabilidade = findViewById(R.id.recyclerViewTopHabilidades);
-
-
-        if (!listQuantidade.isEmpty()) {
-            quantidadePokemons = listQuantidade.get(0).getQuantidade();
-        } else {
-            quantidadePokemons = 0;
-        }
-
-
-        AdapterListaTopTipos adapterTipo = new AdapterListaTopTipos(listTopTipo);
-
-        RecyclerView.LayoutManager layoutManager1 =
-                new LinearLayoutManager(getApplicationContext());
-
-        recyclerViewTipo.setLayoutManager(layoutManager1);
-        recyclerViewTipo.setHasFixedSize(true);
-        recyclerViewTipo.addItemDecoration(
-                new DividerItemDecoration(this, LinearLayout.VERTICAL));
-        recyclerViewTipo.setAdapter(adapterTipo);
-
-
-        AdapterListaTopHabilidades adapterHabilidade = new AdapterListaTopHabilidades(listTopHab);
-
-        RecyclerView.LayoutManager layoutManager2 =
-                new LinearLayoutManager(getApplicationContext());
-
-        recyclerViewHabilidade.setLayoutManager(layoutManager2);
-        recyclerViewHabilidade.setHasFixedSize(true);
-        recyclerViewHabilidade.addItemDecoration(
-                new DividerItemDecoration(this, LinearLayout.VERTICAL));
-        recyclerViewHabilidade.setAdapter(adapterHabilidade);
-
-        total.setText(Integer.toString(quantidadePokemons));
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.createPokemonType();
+        this.countPokemon();
+        this.createPokemonHability();
     }
 
     @Override
@@ -107,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.add) {
             Intent intent = new Intent(getApplicationContext(), CadastroActivity.class);
+            Bundle params = new Bundle();
+            params.putString("usuario", String.valueOf(usuario));
+            intent.putExtras(params);
             startActivity(intent);
         }
         if (item.getItemId() == R.id.listar) {
@@ -122,27 +98,27 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
         if (item.getItemId() == R.id.sair) {
-            finish();
+            finishAffinity();
         }
         return super.onOptionsItemSelected(item);
     }
 
     public void countPokemon() {
         Log.i("debug", "test4");
-        Call<List<TopPokemons>> call = new RetrofitConfig().getPKService().getPokemonQuantidade();
-        call.enqueue(new Callback<List<TopPokemons>>() {
+        Call<TopPokemons> call = new RetrofitConfig().getPKService().getPokemonQuantidade();
+        call.enqueue(new Callback<TopPokemons>() {
             @Override
-            public void onResponse(Call<List<TopPokemons>> call, Response<List<TopPokemons>> response) {
+            public void onResponse(Call<TopPokemons> call, Response<TopPokemons> response) {
                 if (response.isSuccessful()) {
-                    listQuantidade = response.body();
-                    Log.i("debug", "test");
+                    quantidade = response.body();
+                    quantidadePokemons = quantidade.getQuantidade();
+                    Log.i("debug", "Quantidade: " + quantidade.getQuantidade());
+                    total.setText(Integer.toString(quantidadePokemons));
                 }
-                Log.i("debug", "test2");
             }
 
             @Override
-            public void onFailure(Call<List<TopPokemons>> call, Throwable t) {
-                Log.i("debug", "test5");
+            public void onFailure(Call<TopPokemons> call, Throwable t) {
             }
         });
     }
@@ -154,6 +130,15 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<List<TopPokemons>> call, Response<List<TopPokemons>> response) {
                 if (response.isSuccessful()) {
                     listTopTipo = response.body();
+                    recyclerViewTipo = findViewById(R.id.recyclerViewTopTipos);
+                    AdapterListaTopTipos adapterTipo = new AdapterListaTopTipos(listTopTipo);
+                    RecyclerView.LayoutManager layoutManager1 =
+                            new LinearLayoutManager(getApplicationContext());
+                    recyclerViewTipo.setLayoutManager(layoutManager1);
+                    recyclerViewTipo.setHasFixedSize(true);
+                    recyclerViewTipo.addItemDecoration(
+                            new DividerItemDecoration(MainActivity.this, LinearLayout.VERTICAL));
+                    recyclerViewTipo.setAdapter(adapterTipo);
                 }
             }
 
@@ -171,6 +156,15 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<List<TopPokemons>> call, Response<List<TopPokemons>> response) {
                 if (response.isSuccessful()) {
                     listTopHab = response.body();
+                    recyclerViewHabilidade = findViewById(R.id.recyclerViewTopHabilidades);
+                    AdapterListaTopHabilidades adapterHabilidade = new AdapterListaTopHabilidades(listTopHab);
+                    RecyclerView.LayoutManager layoutManager2 =
+                            new LinearLayoutManager(getApplicationContext());
+                    recyclerViewHabilidade.setLayoutManager(layoutManager2);
+                    recyclerViewHabilidade.setHasFixedSize(true);
+                    recyclerViewHabilidade.addItemDecoration(
+                            new DividerItemDecoration(MainActivity.this, LinearLayout.VERTICAL));
+                    recyclerViewHabilidade.setAdapter(adapterHabilidade);
                 }
             }
 

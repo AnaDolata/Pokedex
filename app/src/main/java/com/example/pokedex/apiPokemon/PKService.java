@@ -30,7 +30,7 @@ public interface PKService {
   Call<List<TopPokemons>> getPokemonHabilidadeTop();
 
   @GET("pokemons/quantidade")
-  Call<List<TopPokemons>> getPokemonQuantidade();
+  Call<TopPokemons> getPokemonQuantidade();
 
   @GET("pokemons")
   Call<List<Pokemon>> getPokemonList();
